@@ -119,7 +119,7 @@ input:checked + .slider:before {
                         <td>{{$complain->order->user->zipcode}}</td>
                         <td>{{$complain->description}}</td>
                         <td>
-                            <a href="{{route('admin.manage_orders.new.view_product',$complain->order->product)}}" class="btn btn-info">View</a>
+                            <a href="{{route('admin.manage_orders.new.view_product',$complain->order->order_product[0]->product_id)}}" class="btn btn-info">View</a>
                         </td>
                     </tr>
                     @endforeach

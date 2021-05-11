@@ -6,8 +6,8 @@ use App\Models\ProductImage;
 use App\Models\ProductVideo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Order;
 use App\Models\Stock;
+use App\Models\OrderProduct;
 
 class Product extends Model
 {
@@ -28,13 +28,13 @@ class Product extends Model
         return $this->hasOne(ProductVideo::class);
     }
 
-    public function order()
-    {
-        return $this->hasMany(Order::class);
-    }
-
     public function stock()
     {
         return $this->hasOne(Stock::class);
+    }
+
+    public function order_product()
+    {
+        return $this->belongsTo(OrderProduct::class);
     }
 }

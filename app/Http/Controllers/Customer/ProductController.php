@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Order;
 use App\Models\SkuNumber;
 use App\Models\Stock;
+use App\Models\OrderProduct;
 use Auth;
 
 class ProductController extends Controller
@@ -28,11 +29,16 @@ class ProductController extends Controller
         $sku->number=$sku_number + 1;
         $sku->update();
         $order=new Order;
-        $order->sku_number=$product_name.$sub_category_name.'-'.$sku->number;
-        $order->product_id=$product_id;
+        
         $order->user_id=Auth::user()->id;
-        $order->quantity=1;
+        
         $order->save();
+        $order_product=new OrderProduct;
+        $order_product->sku_number=$product_name.$sub_category_name.'-'.$sku->number;
+        $order_product->order_id=$order->id;
+        $order_product->product_id=$product_id;
+        $order_product->quantity=1;
+        $order_product->save();
         $stock=Stock::where('product_id',$product_id)->first();
         $current=$stock->current;
         $stock->current=$current - 1;

@@ -130,7 +130,7 @@ input:checked + .slider:before {
                         <td>{{$order->user->address}}</td>
                         <td>{{$order->user->zipcode}}</td>
                         <td>
-                            <a href="{{route('admin.manage_orders.new.view_product',$order->product)}}" class="btn btn-info">View</a>
+                            <a href="{{route('admin.manage_orders.new.view_product',$order->order_product[0]->product_id)}}" class="btn btn-info">View</a>
                         </td>
                         <td>
                           <a href="{{route('admin.manage_orders.new.confirmed',$order->id)}}" role="button" class="btn btn-success">Confirm</a>

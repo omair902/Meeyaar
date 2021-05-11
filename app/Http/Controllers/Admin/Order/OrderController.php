@@ -37,11 +37,15 @@ class OrderController extends Controller
     public function cancelled($id)
     {
         $order=Order::find($id);
-        $product=Product::find($order->product_id);
-        $stock=Stock::where('product_id',$product->id)->first();
-        $current=$stock->current;
-        $stock->current=$current + $order->quantity;
-        $stock->update();
+        $order_product=$order->order_product;
+        foreach($order_product as $ord_pro)
+        {
+            $product=Product::find($ord_pro->product_id);
+            $stock=Stock::where('product_id',$ord_pro->product_id)->first();
+            $current=$stock->current;
+            $stock->current=$current + $ord_pro->quantity;
+            $stock->update();
+        }
         $order->status='cancelled';
         $order->update();
         if($order)
