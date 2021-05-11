@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\SkuNumber;
+use App\Models\Stock;
 use Auth;
 
 class ProductController extends Controller
@@ -30,7 +31,12 @@ class ProductController extends Controller
         $order->sku_number=$product_name.$sub_category_name.'-'.$sku->number;
         $order->product_id=$product_id;
         $order->user_id=Auth::user()->id;
+        $order->quantity=1;
         $order->save();
+        $stock=Stock::where('product_id',$product_id)->first();
+        $current=$stock->current;
+        $stock->current=$current - 1;
+        $stock->update();
         if($order)
         {
             return redirect()->back();

@@ -29,6 +29,12 @@
               {{session('reduced')}}
           </div>
         @endif
+        @if(session('empty'))
+          <div class="alert alert-success alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              {{session('empty')}}
+          </div>
+        @endif
         <h3><b> Products </b></h3>
         <div class="table-responsive">
           <table class="table order-listing">
@@ -78,6 +84,7 @@
                     <td >{{$product->stock->cancelled}}</td>
                     <td>
                       <a href="" role="button" class="btn btn-success add" data-url="{{route('admin.inventory_management.add_stock',$product->id)}}" data-toggle="modal" data-target="#AddModal">Add Stock</a>
+                      <a href="#" role="button" class="btn btn-warning reduce" data-max="{{$product->stock->current}}" @if($product->stock->current > 0) data-url="{{route('admin.inventory_management.reduce_stock',$product->id)}}" data-toggle="modal" data-target="#ReduceModal" @else title="Stock is empty" @endif>Reduce Stock</a>
                       <a href="" data-url="{{route('admin.inventory_management.out_of_stock',$product->id)}}" data-id="{{$product->id}}" data-toggle="modal" data-target="#Modal" role="button" class="btn btn-danger remove">Out Of Stock</a>
                     </td>
                 </tr>
@@ -104,7 +111,7 @@
                 <div class="form-group">
                     <label for="NoOfStock" class="col-sm-3">No of stock</label>
                     <div class="col-sm-9">
-                      <input type="number" name="no_of_stock" class="form-control" placeholder="No of stock you want to add" required>
+                      <input type="number" name="no_of_stock" class="form-control" min="1" placeholder="No of stock you want to add" required>
                     </div>
                 </div>
             </div>
@@ -115,7 +122,35 @@
           </div>
         </div>
       </div>
-  </form>
+</form>
+<!-- Modal -->
+<form method="POST" class="reduceForm">
+  @csrf
+      <div class="modal fade" id="ReduceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header bg-warning">
+              <h5 class="modal-title text-white" id="exampleModalLongTitle">Reduce Stock</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="NoOfStock" class="col-sm-3">No of stock</label>
+                    <div class="col-sm-9">
+                      <input type="number" name="no_of_stock" min="1" class="form-control reduce_stock" placeholder="No of stock you want to reduce" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-warning">Reduce</button>
+            </div>
+          </div>
+        </div>
+      </div>
+</form>
 <!-- Modal -->
 <form method="POST" class="form">
   @csrf
@@ -159,6 +194,13 @@
         {
             var url=$(this).attr('data-url');
             $('.addForm').attr('action',url);
+        });
+        $('.reduce').on('click',function()
+        {
+            var url=$(this).attr('data-url');
+            var max=$(this).attr('data-max');
+            $('.reduceForm').attr('action',url);
+            $('.reduce_stock').attr('max',max);
         });
     });
 </script>

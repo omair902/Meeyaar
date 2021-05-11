@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\OrderComplain;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\Stock;
 use Session;
 class ComplainOrderController extends Controller
 {
@@ -24,6 +26,12 @@ class ComplainOrderController extends Controller
         $order=Order::find($complain->order_id);
         $order->status='refunded';
         $order->update();
+
+        $product=Product::find($order->product_id);
+        $stock=Stock::where('product_id',$product->id)->first();
+        $current=$stock->current;
+        $stock->current=$current + $order->quantity;
+        $stock->update();
         if($order)
         {
             Session::flash('refunded','Refunded Sucessfully');

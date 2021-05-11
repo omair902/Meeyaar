@@ -123,7 +123,7 @@
         </ul>
       </div>
     </li>
-    <li class="nav-item">
+    <li class="nav-item {{Request::is('admin/inventory_management') ? 'active' : ''}}">
       <a class="nav-link" href="{{route('admin.inventory_management')}}">
         <i class="menu-icon mdi mdi-television"></i>
         <span class="menu-title">Inventory Management System</span>

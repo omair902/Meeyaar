@@ -28,6 +28,18 @@ class InventoryManagementController extends Controller
         }
     }
 
+    public function reduce_stock(Request $request,$id)
+    {
+        $stock=Stock::where('product_id',$id)->first();
+        $current=$stock->current;
+        $stock->current=$current - $request->no_of_stock;
+        $stock->update();
+        if($stock)
+        {
+            Session::flash('reduced','Stock Reduced Sucessfully');
+            return redirect()->back();
+        }
+    }
     
     public function out_of_stock(Request $request,$id)
     {
@@ -36,7 +48,7 @@ class InventoryManagementController extends Controller
         $stock->update();
         if($stock)
         {
-            Session::flash('reduced','Stock Reduced Sucessfully');
+            Session::flash('empty','Stock Empty Sucessfully');
             return redirect()->back();
         }
     }

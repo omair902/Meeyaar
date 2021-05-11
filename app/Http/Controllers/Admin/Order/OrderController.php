@@ -5,6 +5,7 @@ use App\Models\Order;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Stock;
 use Session;
 
 class OrderController extends Controller
@@ -36,6 +37,11 @@ class OrderController extends Controller
     public function cancelled($id)
     {
         $order=Order::find($id);
+        $product=Product::find($order->product_id);
+        $stock=Stock::where('product_id',$product->id)->first();
+        $current=$stock->current;
+        $stock->current=$current + $order->quantity;
+        $stock->update();
         $order->status='cancelled';
         $order->update();
         if($order)

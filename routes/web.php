@@ -104,6 +104,7 @@ Route::group(['prefix'=>'/admin','middleware'=>['auth','role:admin']],function()
     
     Route::get('inventory_management',[InventoryManagementController::class,'index'])->name('admin.inventory_management');
     Route::post('inventory_management/add_stock/{id}',[InventoryManagementController::class,'add_stock'])->name('admin.inventory_management.add_stock');
+    Route::post('inventory_management/reduce_stock/{id}',[InventoryManagementController::class,'reduce_stock'])->name('admin.inventory_management.reduce_stock');
     Route::post('inventory_management/out_of_stock/{id}',[InventoryManagementController::class,'out_of_stock'])->name('admin.inventory_management.out_of_stock');
 
 
