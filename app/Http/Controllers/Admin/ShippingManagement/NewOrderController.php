@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\ShippingManagement;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\Stock;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Session;
@@ -30,6 +32,15 @@ class NewOrderController extends Controller
     {
         $order=Order::find($id);
         $order->status='completed';
+        $order_product=$order->order_product;
+        foreach($order_product as $ord_pro)
+        {
+            $product=Product::find($ord_pro->product_id);
+            $stock=Stock::where('product_id',$ord_pro->product_id)->first();
+            $current_sold=$stock->sold;
+            $stock->sold=$current_sold + $ord_pro->quantity;
+            $stock->update();
+        }
         $order->update();
         if($order)
         {

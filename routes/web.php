@@ -34,9 +34,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['verify'=>true]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
 Route::group(['prefix'=>'/admin','middleware'=>['auth','role:admin']],function()
 {
@@ -110,10 +110,11 @@ Route::group(['prefix'=>'/admin','middleware'=>['auth','role:admin']],function()
 
 });
 
-Route::group(['prefix'=>'/customer','middleware'=>['auth','role:customer']],function()
+Route::group(['prefix'=>'/customer','middleware'=>['auth','role:customer','verified']],function()
 {
     Route::get('/products',[CustomerProductController::class,'index'])->name('customer.products');
     Route::get('/products/order/{product_id}',[CustomerProductController::class,'order'])->name('customer.products.order');
 
 });
+Route::redirect('/home','/customer/products');
 // Route::get('');

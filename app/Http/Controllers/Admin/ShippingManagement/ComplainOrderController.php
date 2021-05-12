@@ -33,7 +33,9 @@ class ComplainOrderController extends Controller
             $product=Product::find($ord_pro->product_id);
             $stock=Stock::where('product_id',$product->id)->first();
             $current=$stock->current;
-            $stock->current=$current + $order->quantity;
+            $stock->current=$current + $ord_pro->quantity;
+            $current_cancelled=$stock->cancelled;
+            $stock->cancelled=$current_cancelled + $ord_pro->quantity;
             $stock->update();
         }
         if($order)

@@ -44,6 +44,8 @@ class OrderController extends Controller
             $stock=Stock::where('product_id',$ord_pro->product_id)->first();
             $current=$stock->current;
             $stock->current=$current + $ord_pro->quantity;
+            $current_cancelled=$stock->cancelled;
+            $stock->cancelled=$current_cancelled + $ord_pro->quantity;
             $stock->update();
         }
         $order->status='cancelled';
